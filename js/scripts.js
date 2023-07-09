@@ -1,25 +1,17 @@
 //Business Logic for Game
 
-// let newPlayer = new Player("kari");
-
-// let newPlayer2 = new Player("brian");
-
 let game = new Game();
-
-// game.addPlayer(newPlayer);
-
-// game.addPlayer(newPlayer2);
 
 function Game() {
     this.players = {};
     this.currentId = 0;
     this.roll = 0;
+    this.counter = 1;
 }
 
 Game.prototype.updateRollScore = function(newRoll) {
     this.roll += newRoll;
 };
-
 
 Game.prototype.addPlayer = function(player) {
     player.id = this.assignId();
@@ -59,30 +51,79 @@ function startGame(e) {
     e.preventDefault();
     let playerName = document.querySelector("#player1").value
     let playerName2 = document.querySelector("#player2").value
-    
+    document.getElementById("player1Name").innerText = playerName;
+    document.getElementById("player2Name").innerText = playerName2;
     let newPlayer = new Player(playerName);
     let newPlayer2 = new Player(playerName2);
     game.addPlayer(newPlayer);
     game.addPlayer(newPlayer2);
     document.getElementById("startGame").classList.add('hidden');
-    
+    highlightPlayer();
+}
 
+function calculateScore() {
+    let currentTotal = document.getElementById("turnTotalSum");
+    if (game.counter === 1) {
+       game.players["1"].score += parseInt(currentTotal.innerText);
+    } else {
+        game.players["2"].score += parseInt(currentTotal.innerText);
+    }
+    switchPlayer();
+    displayScore();
+    highlightPlayer();
+    currentTotal.innerText = 0;
+    game.roll = 0;
+
+}
+
+function highlightPlayer() {
+    if (game.counter === 1) {
+        document.getElementById("player1Name").classList.add("bg-warning");
+        document.getElementById("player2Name").classList.remove("bg-warning");
+    } else {
+        document.getElementById("player2Name").classList.add("bg-warning");
+        document.getElementById("player1Name").classList.remove("bg-warning");
+    }
+
+}
+
+function displayScore() {
+    let player1Score = document.getElementById("player1Score");
+    let player2Score = document.getElementById("player2Score");
+    player1Score.innerText = game.players["1"].score;
+    player2Score.innerText = game.players["2"].score;
+}
+
+
+function switchPlayer() {
+    if (game.counter === 1) {
+        game.counter = 2;
+
+    } else {
+        game.counter = 1;
+    }
 }
 //UI Logic
 
+//game end function
 
-function displayDiceRoll(e) {
+function handleDiceRoll(e) {
     e.preventDefault;
     let newRoll = rollDice();
     document.querySelector("#currentRoll").innerText = newRoll;
-    game.updateRollScore(newRoll);
-    document.querySelector("#turnTotalSum").innerText = game.roll;
+    if (newRoll === 1) {
+        switchPlayer();
+        document.querySelector("#currentRoll").innerText = 0;
+    } else {
+        game.updateRollScore(newRoll);
+        document.querySelector("#turnTotalSum").innerText = game.roll;  
+    }
 }
 
 window.addEventListener("load", function() {
-    document.querySelector("#roll").addEventListener("click", displayDiceRoll);
+    document.querySelector("#roll").addEventListener("click", handleDiceRoll);
     document.querySelector("#playerNames").addEventListener("click", startGame);
-    
+    document.getElementById("hold").addEventListener("click", calculateScore);
 });
 
 
