@@ -1,9 +1,25 @@
 //Business Logic for Game
 
+// let newPlayer = new Player("kari");
+
+// let newPlayer2 = new Player("brian");
+
+let game = new Game();
+
+// game.addPlayer(newPlayer);
+
+// game.addPlayer(newPlayer2);
+
 function Game() {
     this.players = {};
     this.currentId = 0;
+    this.roll = 0;
 }
+
+Game.prototype.updateRollScore = function(newRoll) {
+    this.roll += newRoll;
+};
+
 
 Game.prototype.addPlayer = function(player) {
     player.id = this.assignId();
@@ -22,8 +38,6 @@ function Player(name) {
     this.score = 0;
 }
 
-
-
 function getRandomNumber (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
@@ -41,20 +55,35 @@ function playerTurn() {
     }
 }
 
-// const newPlayer = new Player("kari");
+function startGame(e) {
+    e.preventDefault();
+    let playerName = document.querySelector("#player1").value
+    let playerName2 = document.querySelector("#player2").value
+    
+    let newPlayer = new Player(playerName);
+    let newPlayer2 = new Player(playerName2);
+    game.addPlayer(newPlayer);
+    game.addPlayer(newPlayer2);
+    document.getElementById("startGame").classList.add('hidden');
+    
 
-// const newPlayer2 = new Player("brian");
-
-// const newGame = new Game();
-
-// newGame.addPlayer(newPlayer2);
-
-// newGame.addPlayer(newPlayer);
+}
+//UI Logic
 
 
-// newGame:
+function displayDiceRoll(e) {
+    e.preventDefault;
+    let newRoll = rollDice();
+    document.querySelector("#currentRoll").innerText = newRoll;
+    game.updateRollScore(newRoll);
+    document.querySelector("#turnTotalSum").innerText = game.roll;
+}
 
-// {
-//     1: {name: brian, score: 0},
-//     2: {name: kara, score: 0}
-// }
+window.addEventListener("load", function() {
+    document.querySelector("#roll").addEventListener("click", displayDiceRoll);
+    document.querySelector("#playerNames").addEventListener("click", startGame);
+    
+});
+
+
+
