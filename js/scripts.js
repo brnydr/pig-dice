@@ -102,6 +102,7 @@ function switchPlayer() {
     } else {
         game.counter = 1;
     }
+    highlightPlayer();
 }
 //UI Logic
 
@@ -113,7 +114,6 @@ function handleDiceRoll(e) {
     document.querySelector("#currentRoll").innerText = newRoll;
     if (newRoll === 1) {
         switchPlayer();
-        document.querySelector("#currentRoll").innerText = 0;
     } else {
         game.updateRollScore(newRoll);
         document.querySelector("#turnTotalSum").innerText = game.roll;  
@@ -122,7 +122,7 @@ function handleDiceRoll(e) {
 
 window.addEventListener("load", function() {
     document.querySelector("#roll").addEventListener("click", handleDiceRoll);
-    document.querySelector("#playerNames").addEventListener("click", startGame);
+    document.querySelector("form").addEventListener("submit", startGame);
     document.getElementById("hold").addEventListener("click", calculateScore);
 });
 
