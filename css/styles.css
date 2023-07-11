@@ -7,3 +7,16 @@ h1 {
 .hidden {
     display: none;
 }
+
+.swirl-in-bck {
+	-webkit-animation: swirl-in-bck 1.5s ease-out both;
+	        animation: swirl-in-bck 1.5s ease-out both;
+}
+
+div#winner {
+    font-family: 'Rubik Moonrocks';
+    font-size: xx-large
+}
+
+
+@keyframes swirl-in-bck{0%{transform:rotate(540deg) scale(5);opacity:0}100%{transform:rotate(0) scale(1);opacity:1}}
